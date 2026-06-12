@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Derrick Liu — Developer</title>
+
+  <!-- Google Fonts: Inter for body, DM Serif Display for the name -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:      #111111;
+      --gray-soft:  #555555;
+      --gray-rule:  #e5e5e5;
+      --bg:         #ffffff;
+      --accent:     #2563eb;   /* subtle blue for links/hover */
+
+      --font-display: 'DM Serif Display', serif;
+      --font-body:    'Inter', sans-serif;
+
+      --max-w: 680px;
+      --pad:   clamp(1.5rem, 5vw, 3rem);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--black);
+      background: var(--bg);
+      /* single thin left-border that runs the full page height */
+      border-left: 3px solid var(--black);
+      min-height: 100vh;
+    }
+
+    /* ─── Layout wrapper ──────────────────────────────────────────── */
+    .page {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--pad);
+    }
+
+    /* ─── Navigation ──────────────────────────────────────────────── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 2rem 0 1.5rem;
+      border-bottom: 1px solid var(--gray-rule);
+    }
+
+    nav .logo {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      letter-spacing: 0.01em;
+      text-decoration: none;
+      color: var(--black);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+
+    nav ul a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-decoration: none;
+      color: var(--gray-soft);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.15s;
+    }
+
+    nav ul a:hover { color: var(--black); }
+
+    /* ─── Hero ────────────────────────────────────────────────────── */
+    #about {
+      padding: 5rem 0 4rem;
+      border-bottom: 1px solid var(--gray-rule);
+    }
+
+    #about .eyebrow {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-soft);
+      margin-bottom: 1.25rem;
+    }
+
+    #about h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 6vw, 3.8rem);
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.5rem;
+    }
+
+    #about p {
+      font-size: 1.05rem;
+      color: var(--gray-soft);
+      max-width: 520px;
+      margin-bottom: 1rem;
+    }
+
+    /* ─── Section common ──────────────────────────────────────────── */
+    section {
+      padding: 4rem 0;
+      border-bottom: 1px solid var(--gray-rule);
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-soft);
+      margin-bottom: 2.5rem;
+    }
+
+    /* ─── Projects ────────────────────────────────────────────────── */
+    .projects-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .project-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      gap: 1rem;
+      padding: 1.75rem 0;
+      border-top: 1px solid var(--gray-rule);
+      text-decoration: none;
+      color: inherit;
+      transition: opacity 0.15s;
+    }
+
+    .project-item:last-child { border-bottom: 1px solid var(--gray-rule); }
+    .project-item:hover { opacity: 0.65; }
+
+    .project-item h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+    }
+
+    .project-item p {
+      font-size: 0.9rem;
+      color: var(--gray-soft);
+      line-height: 1.5;
+      max-width: 460px;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.7rem;
+    }
+
+    .tag {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      padding: 0.2rem 0.55rem;
+      border: 1px solid var(--gray-rule);
+      border-radius: 99px;
+      color: var(--gray-soft);
+    }
+
+    /* arrow icon on the project card */
+    .project-arrow {
+      font-size: 1.1rem;
+      color: var(--gray-soft);
+      margin-top: 0.2rem;
+      transition: transform 0.15s;
+    }
+
+    .project-item:hover .project-arrow { transform: translate(3px, -3px); }
+
+    /* ─── Skills ──────────────────────────────────────────────────── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 2rem 3rem;
+    }
+
+    .skill-group h4 {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-soft);
+      margin-bottom: 0.75rem;
+    }
+
+    .skill-group ul {
+      list-style: none;
+      font-size: 0.95rem;
+      color: var(--black);
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    /* ─── Contact ─────────────────────────────────────────────────── */
+    #contact p {
+      font-size: 1.05rem;
+      color: var(--gray-soft);
+      margin-bottom: 2rem;
+      max-width: 480px;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--black);
+      text-decoration: none;
+      border-bottom: 1px solid var(--black);
+      padding-bottom: 1px;
+      transition: opacity 0.15s;
+    }
+
+    .contact-link:hover { opacity: 0.5; }
+
+    /* ─── Footer ──────────────────────────────────────────────────── */
+    footer {
+      padding: 2.5rem 0;
+      font-size: 0.8rem;
+      color: var(--gray-soft);
+    }
+
+    /* ─── Mobile ──────────────────────────────────────────────────── */
+    @media (max-width: 520px) {
+      body { border-left: none; border-top: 3px solid var(--black); }
+      nav ul { gap: 1.25rem; }
+      .project-item { grid-template-columns: 1fr; }
+      .project-arrow { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page">
+
+    <!-- ── Navigation ─────────────────────────────────────────────── -->
+    <nav>
+      <a href="#" class="logo">Derrick Liu</a>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Work</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <!-- ── Hero / About ───────────────────────────────────────────── -->
+    <section id="about">
+      <p class="eyebrow">Full-Stack &amp; AI/ML Developer</p>
+      <h1>Building things<br>that learn.</h1>
+      <p>
+        I'm Derrick, a self-taught developer working at the intersection of
+        full-stack web development and machine learning. I build portfolio
+        projects to sharpen my craft — from RAG pipelines to webtoon platforms.
+      </p>
+      <p>
+        Currently based in Maryland. Always shipping something.
+      </p>
+    </section>
+
+    <!-- ── Projects ───────────────────────────────────────────────── -->
+    <section id="projects">
+      <p class="section-label">Selected Projects</p>
+
+      <div class="projects-grid">
+
+        <!-- Project 1: Dievs -->
+        <a class="project-item" href="https://github.com/YOUR_USERNAME/dievs" target="_blank" rel="noopener">
+          <div>
+            <h3>Dievs</h3>
+            <p>A full-stack webtoon rating and review platform with tier-based scoring (F–S), powered by the AniList GraphQL API.</p>
+            <div class="project-tags">
+              <span class="tag">FastAPI</span>
+              <span class="tag">PostgreSQL</span>
+              <span class="tag">React</span>
+              <span class="tag">GraphQL</span>
+            </div>
+          </div>
+          <span class="project-arrow">↗</span>
+        </a>
+
+        <!-- Project 2: RAG Q&A -->
+        <a class="project-item" href="https://github.com/YOUR_USERNAME/rag-qa" target="_blank" rel="noopener">
+          <div>
+            <h3>RAG Document Q&amp;A</h3>
+            <p>Ask questions over your own documents using retrieval-augmented generation, semantic search, and the Anthropic API.</p>
+            <div class="project-tags">
+              <span class="tag">Python</span>
+              <span class="tag">ChromaDB</span>
+              <span class="tag">sentence-transformers</span>
+              <span class="tag">Anthropic API</span>
+            </div>
+          </div>
+          <span class="project-arrow">↗</span>
+        </a>
+
+        <!-- Project 3: Stock Predictor -->
+        <a class="project-item" href="https://github.com/YOUR_USERNAME/stock-predictor" target="_blank" rel="noopener">
+          <div>
+            <h3>Stock Price Predictor</h3>
+            <p>LSTM neural network that forecasts stock price direction using percentage-change targets and a custom directional loss function.</p>
+            <div class="project-tags">
+              <span class="tag">PyTorch</span>
+              <span class="tag">LSTM</span>
+              <span class="tag">Streamlit</span>
+              <span class="tag">yfinance</span>
+            </div>
+          </div>
+          <span class="project-arrow">↗</span>
+        </a>
+
+        <!-- Project 4: URL Shortener -->
+        <a class="project-item" href="https://github.com/YOUR_USERNAME/url-shortener" target="_blank" rel="noopener">
+          <div>
+            <h3>URL Shortener</h3>
+            <p>Lightweight link-shortening service with a REST API, persistent storage, and a plain HTML/CSS/JS frontend.</p>
+            <div class="project-tags">
+              <span class="tag">FastAPI</span>
+              <span class="tag">SQLAlchemy</span>
+              <span class="tag">SQLite</span>
+            </div>
+          </div>
+          <span class="project-arrow">↗</span>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ── Skills ─────────────────────────────────────────────────── -->
+    <section id="skills">
+      <p class="section-label">Tech Stack</p>
+
+      <div class="skills-grid">
+
+        <div class="skill-group">
+          <h4>Languages</h4>
+          <ul>
+            <li>Python</li>
+            <li>JavaScript / TypeScript</li>
+            <li>SQL</li>
+            <li>HTML &amp; CSS</li>
+          </ul>
+        </div>
+
+        <div class="skill-group">
+          <h4>Backend</h4>
+          <ul>
+            <li>FastAPI</li>
+            <li>SQLAlchemy</li>
+            <li>PostgreSQL</li>
+            <li>SQLite</li>
+          </ul>
+        </div>
+
+        <div class="skill-group">
+          <h4>Frontend</h4>
+          <ul>
+            <li>React</li>
+            <li>Vite</li>
+            <li>Vanilla JS</li>
+          </ul>
+        </div>
+
+        <div class="skill-group">
+          <h4>AI / ML</h4>
+          <ul>
+            <li>PyTorch</li>
+            <li>ChromaDB</li>
+            <li>sentence-transformers</li>
+            <li>Anthropic API</li>
+          </ul>
+        </div>
+
+        <div class="skill-group">
+          <h4>Tools</h4>
+          <ul>
+            <li>Git &amp; GitHub</li>
+            <li>VS Code</li>
+            <li>Streamlit</li>
+            <li>Postman</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Contact ────────────────────────────────────────────────── -->
+    <section id="contact">
+      <p class="section-label">Get In Touch</p>
+      <p>I'm always open to interesting projects, internship opportunities, or just a good conversation about AI and software.</p>
+
+      <div class="contact-links">
+        <!-- Replace the href values with your real links -->
+        <a class="contact-link" href="mailto:your@email.com">Email ↗</a>
+        <a class="contact-link" href="https://github.com/YOUR_USERNAME" target="_blank" rel="noopener">GitHub ↗</a>
+        <a class="contact-link" href="https://linkedin.com/in/YOUR_HANDLE" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </section>
+
+    <!-- ── Footer ─────────────────────────────────────────────────── -->
+    <footer>
+      <p>© 2026 Derrick Liu. Built with HTML &amp; CSS — no frameworks needed.</p>
+    </footer>
+
+  </div><!-- /page -->
+
+</body>
+</html>

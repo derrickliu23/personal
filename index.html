@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Derrick Liu — Developer</title>
 
-  <!-- Google Fonts: Inter for body, DM Serif Display for the name -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
@@ -19,7 +18,7 @@
       --gray-soft:  #555555;
       --gray-rule:  #e5e5e5;
       --bg:         #ffffff;
-      --accent:     #2563eb;   /* subtle blue for links/hover */
+      --accent:     #2563eb;
 
       --font-display: 'DM Serif Display', serif;
       --font-body:    'Inter', sans-serif;
@@ -36,7 +35,6 @@
       line-height: 1.75;
       color: var(--black);
       background: var(--bg);
-      /* single thin left-border that runs the full page height */
       border-left: 3px solid var(--black);
       min-height: 100vh;
     }
@@ -55,6 +53,8 @@
       justify-content: space-between;
       padding: 2rem 0 1.5rem;
       border-bottom: 1px solid var(--gray-rule);
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
     nav .logo {
@@ -68,7 +68,8 @@
     nav ul {
       list-style: none;
       display: flex;
-      gap: 2rem;
+      gap: 1.5rem;
+      flex-wrap: wrap;
     }
 
     nav ul a {
@@ -180,7 +181,6 @@
       color: var(--gray-soft);
     }
 
-    /* arrow icon on the project card */
     .project-arrow {
       font-size: 1.1rem;
       color: var(--gray-soft);
@@ -213,6 +213,122 @@
       display: flex;
       flex-direction: column;
       gap: 0.35rem;
+    }
+
+    /* ─── Research ────────────────────────────────────────────────── */
+    .research-intro {
+      font-size: 1.05rem;
+      color: var(--gray-soft);
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+      line-height: 1.75;
+    }
+
+    .research-interests {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 3rem;
+    }
+
+    .research-interest-item {
+      padding: 1.5rem 0;
+      border-top: 1px solid var(--gray-rule);
+    }
+
+    .research-interest-item:last-child {
+      border-bottom: 1px solid var(--gray-rule);
+    }
+
+    .research-interest-item h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 0.35rem;
+    }
+
+    .research-interest-item p {
+      font-size: 0.9rem;
+      color: var(--gray-soft);
+      line-height: 1.6;
+      max-width: 500px;
+    }
+
+    .research-sublabel {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray-soft);
+      margin-bottom: 1.25rem;
+      margin-top: 2.5rem;
+    }
+
+    .writing-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .writing-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem 0;
+      border-top: 1px solid var(--gray-rule);
+      text-decoration: none;
+      color: inherit;
+      transition: opacity 0.15s;
+    }
+
+    .writing-item:last-child { border-bottom: 1px solid var(--gray-rule); }
+    .writing-item:hover { opacity: 0.6; }
+
+    .writing-item .writing-meta {
+      font-size: 0.8rem;
+      color: var(--gray-soft);
+      letter-spacing: 0.03em;
+      margin-top: 0.15rem;
+    }
+
+    .writing-item h4 {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .writing-arrow {
+      font-size: 1rem;
+      color: var(--gray-soft);
+      transition: transform 0.15s;
+    }
+
+    .writing-item:hover .writing-arrow { transform: translate(3px, -3px); }
+
+    /* ─── Elsewhere / Other ───────────────────────────────────────── */
+    .elsewhere-intro {
+      font-size: 1.05rem;
+      color: var(--gray-soft);
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+      line-height: 1.75;
+    }
+
+    .elsewhere-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2.5rem 3rem;
+    }
+
+    .elsewhere-block h4 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .elsewhere-block p {
+      font-size: 0.9rem;
+      color: var(--gray-soft);
+      line-height: 1.6;
     }
 
     /* ─── Contact ─────────────────────────────────────────────────── */
@@ -257,6 +373,8 @@
       nav ul { gap: 1.25rem; }
       .project-item { grid-template-columns: 1fr; }
       .project-arrow { display: none; }
+      .writing-item { grid-template-columns: 1fr; }
+      .writing-arrow { display: none; }
     }
   </style>
 </head>
@@ -269,8 +387,10 @@
       <a href="#" class="logo">Derrick Liu</a>
       <ul>
         <li><a href="#about">About</a></li>
-        <li><a href="#projects">Work</a></li>
+        <li><a href="#projects">Coding</a></li>
         <li><a href="#skills">Skills</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#elsewhere">Elsewhere</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
@@ -289,13 +409,12 @@
       </p>
     </section>
 
-    <!-- ── Projects ───────────────────────────────────────────────── -->
+    <!-- ── Coding / Projects ──────────────────────────────────────── -->
     <section id="projects">
-      <p class="section-label">Selected Projects</p>
+      <p class="section-label">Coding — Selected Projects</p>
 
       <div class="projects-grid">
 
-        <!-- Project 1: Dievs -->
         <a class="project-item" href="https://github.com/YOUR_USERNAME/dievs" target="_blank" rel="noopener">
           <div>
             <h3>Dievs</h3>
@@ -305,12 +424,12 @@
               <span class="tag">PostgreSQL</span>
               <span class="tag">React</span>
               <span class="tag">GraphQL</span>
+              <span class="tag">Auth0</span>
             </div>
           </div>
           <span class="project-arrow">↗</span>
         </a>
 
-        <!-- Project 2: RAG Q&A -->
         <a class="project-item" href="https://github.com/YOUR_USERNAME/rag-qa" target="_blank" rel="noopener">
           <div>
             <h3>RAG Document Q&amp;A</h3>
@@ -325,7 +444,6 @@
           <span class="project-arrow">↗</span>
         </a>
 
-        <!-- Project 3: Stock Predictor -->
         <a class="project-item" href="https://github.com/YOUR_USERNAME/stock-predictor" target="_blank" rel="noopener">
           <div>
             <h3>Stock Price Predictor</h3>
@@ -340,7 +458,19 @@
           <span class="project-arrow">↗</span>
         </a>
 
-        <!-- Project 4: URL Shortener -->
+        <a class="project-item" href="https://github.com/YOUR_USERNAME/promoter-analyzer" target="_blank" rel="noopener">
+          <div>
+            <h3>Promoter Analyzer</h3>
+            <p>Fetches upstream promoter sequences from NCBI Entrez for any gene, with TP53 as the test case. A tool for computational biology workflows.</p>
+            <div class="project-tags">
+              <span class="tag">Python</span>
+              <span class="tag">Biopython</span>
+              <span class="tag">NCBI Entrez</span>
+            </div>
+          </div>
+          <span class="project-arrow">↗</span>
+        </a>
+
         <a class="project-item" href="https://github.com/YOUR_USERNAME/url-shortener" target="_blank" rel="noopener">
           <div>
             <h3>URL Shortener</h3>
@@ -403,13 +533,112 @@
         </div>
 
         <div class="skill-group">
-          <h4>Tools</h4>
+          <h4>Bio / Tools</h4>
           <ul>
+            <li>Biopython</li>
+            <li>NCBI Entrez</li>
             <li>Git &amp; GitHub</li>
-            <li>VS Code</li>
             <li>Streamlit</li>
-            <li>Postman</li>
           </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Research ───────────────────────────────────────────────── -->
+    <section id="research">
+      <p class="section-label">Research</p>
+
+      <p class="research-intro">
+        I'm working toward a PhD at the intersection of computational biology and
+        computer science — specifically in how chromatin architecture and histone
+        variants regulate gene expression. I'm drawn to questions where
+        single-molecule imaging and quantitative modeling meet molecular biology.
+      </p>
+
+      <div class="research-interests">
+
+        <div class="research-interest-item">
+          <h3>Histone Variant Biology &amp; Gene Regulation</h3>
+          <p>
+            Focused on H2A.Z and its role in nucleosome dynamics at gene
+            promoters. Interested in how variant incorporation shapes
+            accessibility and transcriptional output at a mechanistic level.
+          </p>
+        </div>
+
+        <div class="research-interest-item">
+          <h3>Single-Molecule Imaging</h3>
+          <p>
+            Drawn to live-cell fluorescence and super-resolution approaches
+            that let you watch individual transcription factors and chromatin
+            regulators in action — rather than inferring behavior from
+            population averages.
+          </p>
+        </div>
+
+        <div class="research-interest-item">
+          <h3>Computational Genomics</h3>
+          <p>
+            Applying sequence analysis, motif discovery, and ML models to
+            understand cis-regulatory elements. Actively building tools
+            (like Promoter Analyzer) to practice these methods hands-on.
+          </p>
+        </div>
+
+      </div>
+
+      <p class="research-sublabel">Writing</p>
+
+      <div class="writing-list">
+        <!-- Add real links/titles when you have them -->
+        <a class="writing-item" href="#" target="_blank" rel="noopener">
+          <div>
+            <h4>Your writing title here</h4>
+            <p class="writing-meta">Essay · 2025</p>
+          </div>
+          <span class="writing-arrow">↗</span>
+        </a>
+      </div>
+
+    </section>
+
+    <!-- ── Elsewhere ──────────────────────────────────────────────── -->
+    <section id="elsewhere">
+      <p class="section-label">Elsewhere</p>
+
+      <p class="elsewhere-intro">
+        Outside of code and research, I'm competitive, curious, and almost
+        always in the middle of learning something new.
+      </p>
+
+      <div class="elsewhere-grid">
+
+        <div class="elsewhere-block">
+          <h4>Quizbowl</h4>
+          <p>
+            I compete in academic quiz bowl — a format that rewards deep,
+            specific knowledge across history, science, literature, and the arts.
+            It's reshaped how I read and retain information.
+          </p>
+        </div>
+
+        <div class="elsewhere-block">
+          <h4>Strategy Games</h4>
+          <p>
+            I play multiplayer strategy games with friends — the kind where
+            you're managing systems, reading opponents, and making decisions
+            under pressure. Good training for everything else.
+          </p>
+        </div>
+
+        <div class="elsewhere-block">
+          <h4>Learning in Public</h4>
+          <p>
+            Most of what I know is self-taught. I believe the best way to
+            understand something is to build it — so I do, and I put it on
+            GitHub.
+          </p>
         </div>
 
       </div>
@@ -418,10 +647,9 @@
     <!-- ── Contact ────────────────────────────────────────────────── -->
     <section id="contact">
       <p class="section-label">Get In Touch</p>
-      <p>I'm always open to interesting projects, internship opportunities, or just a good conversation about AI and software.</p>
+      <p>I'm always open to interesting projects, internship opportunities, or just a good conversation about AI, biology, and software.</p>
 
       <div class="contact-links">
-        <!-- Replace the href values with your real links -->
         <a class="contact-link" href="mailto:your@email.com">Email ↗</a>
         <a class="contact-link" href="https://github.com/YOUR_USERNAME" target="_blank" rel="noopener">GitHub ↗</a>
         <a class="contact-link" href="https://linkedin.com/in/YOUR_HANDLE" target="_blank" rel="noopener">LinkedIn ↗</a>

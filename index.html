@@ -10,21 +10,22 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
 
   <style>
-    /* ─── Reset & Base ─────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --black:      #111111;
-      --gray-soft:  #555555;
-      --gray-rule:  #e5e5e5;
-      --bg:         #ffffff;
-      --accent:     #2563eb;
+      --bg:           #0a0a0a;
+      --surface:      #111111;
+      --white:        #f0ede8;
+      --gray-soft:    #888880;
+      --gray-rule:    #222220;
+      --accent:       #4ade80;
+      --accent-dim:   rgba(74, 222, 128, 0.15);
+      --accent-rule:  rgba(74, 222, 128, 0.4);
 
       --font-display: 'DM Serif Display', serif;
       --font-body:    'Inter', sans-serif;
-
       --max-w: 680px;
-      --pad:   clamp(1.5rem, 5vw, 3rem);
+      --pad: clamp(1.5rem, 5vw, 3rem);
     }
 
     html { scroll-behavior: smooth; }
@@ -33,20 +34,33 @@
       font-family: var(--font-body);
       font-size: 16px;
       line-height: 1.75;
-      color: var(--black);
+      color: var(--white);
       background: var(--bg);
-      border-left: 3px solid var(--black);
+      border-left: 3px solid var(--accent);
       min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
     }
 
-    /* ─── Layout wrapper ──────────────────────────────────────────── */
+    /* ── Bio canvas background ── */
+    #bio-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.18;
+    }
+
     .page {
       max-width: var(--max-w);
       margin: 0 auto;
       padding: 0 var(--pad);
+      position: relative;
+      z-index: 1;
     }
 
-    /* ─── Navigation ──────────────────────────────────────────────── */
+    /* ── Nav ── */
     nav {
       display: flex;
       align-items: center;
@@ -62,40 +76,40 @@
       font-size: 1.1rem;
       letter-spacing: 0.01em;
       text-decoration: none;
-      color: var(--black);
+      color: var(--white);
     }
 
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-    }
+    nav ul { list-style: none; display: flex; gap: 1.5rem; flex-wrap: wrap; }
 
     nav ul a {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 500;
       text-decoration: none;
       color: var(--gray-soft);
-      letter-spacing: 0.05em;
+      letter-spacing: 0.07em;
       text-transform: uppercase;
       transition: color 0.15s;
     }
 
-    nav ul a:hover { color: var(--black); }
+    nav ul a:hover { color: var(--accent); }
 
-    /* ─── Hero ────────────────────────────────────────────────────── */
+    /* ── Sections ── */
+    section {
+      padding: 4rem 0;
+      border-bottom: 1px solid var(--gray-rule);
+    }
+
     #about {
       padding: 5rem 0 4rem;
       border-bottom: 1px solid var(--gray-rule);
     }
 
     #about .eyebrow {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 500;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--gray-soft);
+      color: var(--accent);
       margin-bottom: 1.25rem;
     }
 
@@ -105,6 +119,7 @@
       line-height: 1.1;
       letter-spacing: -0.01em;
       margin-bottom: 1.5rem;
+      color: var(--white);
     }
 
     #about p {
@@ -114,27 +129,17 @@
       margin-bottom: 1rem;
     }
 
-    /* ─── Section common ──────────────────────────────────────────── */
-    section {
-      padding: 4rem 0;
-      border-bottom: 1px solid var(--gray-rule);
-    }
-
     .section-label {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 500;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--gray-soft);
+      color: var(--accent);
       margin-bottom: 2.5rem;
     }
 
-    /* ─── Projects ────────────────────────────────────────────────── */
-    .projects-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
+    /* ── Projects ── */
+    .projects-grid { display: flex; flex-direction: column; }
 
     .project-item {
       display: grid;
@@ -149,30 +154,15 @@
     }
 
     .project-item:last-child { border-bottom: 1px solid var(--gray-rule); }
-    .project-item:hover { opacity: 0.65; }
+    .project-item:hover { opacity: 0.6; }
 
-    .project-item h3 {
-      font-size: 1rem;
-      font-weight: 500;
-      margin-bottom: 0.3rem;
-    }
+    .project-item h3 { font-size: 1rem; font-weight: 500; margin-bottom: 0.3rem; color: var(--white); }
+    .project-item p  { font-size: 0.9rem; color: var(--gray-soft); line-height: 1.5; max-width: 460px; }
 
-    .project-item p {
-      font-size: 0.9rem;
-      color: var(--gray-soft);
-      line-height: 1.5;
-      max-width: 460px;
-    }
-
-    .project-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-top: 0.7rem;
-    }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.7rem; }
 
     .tag {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 500;
       letter-spacing: 0.04em;
       padding: 0.2rem 0.55rem;
@@ -181,41 +171,35 @@
       color: var(--gray-soft);
     }
 
-    .project-arrow {
-      font-size: 1.1rem;
-      color: var(--gray-soft);
-      margin-top: 0.2rem;
-      transition: transform 0.15s;
-    }
+    .project-arrow { font-size: 1.1rem; color: var(--gray-soft); margin-top: 0.2rem; transition: transform 0.15s; }
+    .project-item:hover .project-arrow { transform: translate(3px, -3px); color: var(--accent); }
 
-    .project-item:hover .project-arrow { transform: translate(3px, -3px); }
-
-    /* ─── Skills ──────────────────────────────────────────────────── */
+    /* ── Skills ── */
     .skills-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 2rem 3rem;
     }
 
     .skill-group h4 {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 500;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--gray-soft);
+      color: var(--accent);
       margin-bottom: 0.75rem;
     }
 
     .skill-group ul {
       list-style: none;
-      font-size: 0.95rem;
-      color: var(--black);
+      font-size: 0.92rem;
+      color: var(--gray-soft);
       display: flex;
       flex-direction: column;
       gap: 0.35rem;
     }
 
-    /* ─── Research ────────────────────────────────────────────────── */
+    /* ── Research ── */
     .research-intro {
       font-size: 1.05rem;
       color: var(--gray-soft);
@@ -224,50 +208,29 @@
       line-height: 1.75;
     }
 
-    .research-interests {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      margin-bottom: 3rem;
-    }
+    .research-interests { display: flex; flex-direction: column; margin-bottom: 3rem; }
 
     .research-interest-item {
       padding: 1.5rem 0;
       border-top: 1px solid var(--gray-rule);
     }
 
-    .research-interest-item:last-child {
-      border-bottom: 1px solid var(--gray-rule);
-    }
+    .research-interest-item:last-child { border-bottom: 1px solid var(--gray-rule); }
 
-    .research-interest-item h3 {
-      font-size: 1rem;
-      font-weight: 500;
-      margin-bottom: 0.35rem;
-    }
-
-    .research-interest-item p {
-      font-size: 0.9rem;
-      color: var(--gray-soft);
-      line-height: 1.6;
-      max-width: 500px;
-    }
+    .research-interest-item h3 { font-size: 1rem; font-weight: 500; margin-bottom: 0.35rem; color: var(--white); }
+    .research-interest-item p  { font-size: 0.9rem; color: var(--gray-soft); line-height: 1.6; max-width: 500px; }
 
     .research-sublabel {
       font-size: 0.72rem;
       font-weight: 500;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--gray-soft);
+      color: var(--accent);
       margin-bottom: 1.25rem;
       margin-top: 2.5rem;
     }
 
-    .writing-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
+    .writing-list { display: flex; flex-direction: column; }
 
     .writing-item {
       display: grid;
@@ -283,28 +246,12 @@
 
     .writing-item:last-child { border-bottom: 1px solid var(--gray-rule); }
     .writing-item:hover { opacity: 0.6; }
+    .writing-item h4    { font-size: 0.95rem; font-weight: 500; color: var(--white); }
+    .writing-meta       { font-size: 0.78rem; color: var(--gray-soft); margin-top: 0.15rem; }
+    .writing-arrow      { font-size: 1rem; color: var(--gray-soft); transition: transform 0.15s; }
+    .writing-item:hover .writing-arrow { transform: translate(3px, -3px); color: var(--accent); }
 
-    .writing-item .writing-meta {
-      font-size: 0.8rem;
-      color: var(--gray-soft);
-      letter-spacing: 0.03em;
-      margin-top: 0.15rem;
-    }
-
-    .writing-item h4 {
-      font-size: 0.95rem;
-      font-weight: 500;
-    }
-
-    .writing-arrow {
-      font-size: 1rem;
-      color: var(--gray-soft);
-      transition: transform 0.15s;
-    }
-
-    .writing-item:hover .writing-arrow { transform: translate(3px, -3px); }
-
-    /* ─── Elsewhere / Other ───────────────────────────────────────── */
+    /* ── Elsewhere ── */
     .elsewhere-intro {
       font-size: 1.05rem;
       color: var(--gray-soft);
@@ -315,7 +262,7 @@
 
     .elsewhere-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 2.5rem 3rem;
     }
 
@@ -323,27 +270,15 @@
       font-family: var(--font-display);
       font-size: 1.1rem;
       margin-bottom: 0.5rem;
+      color: var(--white);
     }
 
-    .elsewhere-block p {
-      font-size: 0.9rem;
-      color: var(--gray-soft);
-      line-height: 1.6;
-    }
+    .elsewhere-block p { font-size: 0.9rem; color: var(--gray-soft); line-height: 1.6; }
 
-    /* ─── Contact ─────────────────────────────────────────────────── */
-    #contact p {
-      font-size: 1.05rem;
-      color: var(--gray-soft);
-      margin-bottom: 2rem;
-      max-width: 480px;
-    }
+    /* ── Contact ── */
+    #contact p { font-size: 1.05rem; color: var(--gray-soft); margin-bottom: 2rem; max-width: 480px; }
 
-    .contact-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
+    .contact-links { display: flex; flex-wrap: wrap; gap: 1rem; }
 
     .contact-link {
       display: inline-flex;
@@ -351,38 +286,36 @@
       gap: 0.4rem;
       font-size: 0.9rem;
       font-weight: 500;
-      color: var(--black);
+      color: var(--white);
       text-decoration: none;
-      border-bottom: 1px solid var(--black);
-      padding-bottom: 1px;
-      transition: opacity 0.15s;
+      border-bottom: 1px solid var(--accent-rule);
+      padding-bottom: 2px;
+      transition: color 0.15s, border-color 0.15s;
     }
 
-    .contact-link:hover { opacity: 0.5; }
+    .contact-link:hover { color: var(--accent); border-color: var(--accent); }
 
-    /* ─── Footer ──────────────────────────────────────────────────── */
     footer {
       padding: 2.5rem 0;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--gray-soft);
     }
 
-    /* ─── Mobile ──────────────────────────────────────────────────── */
     @media (max-width: 520px) {
-      body { border-left: none; border-top: 3px solid var(--black); }
-      nav ul { gap: 1.25rem; }
-      .project-item { grid-template-columns: 1fr; }
-      .project-arrow { display: none; }
-      .writing-item { grid-template-columns: 1fr; }
-      .writing-arrow { display: none; }
+      body { border-left: none; border-top: 3px solid var(--accent); }
+      nav ul { gap: 1.1rem; }
+      .project-item, .writing-item { grid-template-columns: 1fr; }
+      .project-arrow, .writing-arrow { display: none; }
     }
   </style>
 </head>
 <body>
 
+  <!-- ── Biological background canvas ── -->
+  <canvas id="bio-canvas"></canvas>
+
   <div class="page">
 
-    <!-- ── Navigation ─────────────────────────────────────────────── -->
     <nav>
       <a href="#" class="logo">Derrick Liu</a>
       <ul>
@@ -395,24 +328,15 @@
       </ul>
     </nav>
 
-    <!-- ── Hero / About ───────────────────────────────────────────── -->
     <section id="about">
       <p class="eyebrow">Full-Stack &amp; AI/ML Developer</p>
       <h1>Building things<br>that learn.</h1>
-      <p>
-        I'm Derrick, a self-taught developer working at the intersection of
-        full-stack web development and machine learning. I build portfolio
-        projects to sharpen my craft — from RAG pipelines to webtoon platforms.
-      </p>
-      <p>
-        Currently based in Maryland. Always shipping something.
-      </p>
+      <p>I'm Derrick, a self-taught developer working at the intersection of full-stack web development and machine learning. I build portfolio projects to sharpen my craft — from RAG pipelines to webtoon platforms.</p>
+      <p>Currently based in Maryland. Always shipping something.</p>
     </section>
 
-    <!-- ── Coding / Projects ──────────────────────────────────────── -->
     <section id="projects">
       <p class="section-label">Coding — Selected Projects</p>
-
       <div class="projects-grid">
 
         <a class="project-item" href="https://github.com/YOUR_USERNAME/dievs" target="_blank" rel="noopener">
@@ -420,11 +344,8 @@
             <h3>Dievs</h3>
             <p>A full-stack webtoon rating and review platform with tier-based scoring (F–S), powered by the AniList GraphQL API.</p>
             <div class="project-tags">
-              <span class="tag">FastAPI</span>
-              <span class="tag">PostgreSQL</span>
-              <span class="tag">React</span>
-              <span class="tag">GraphQL</span>
-              <span class="tag">Auth0</span>
+              <span class="tag">FastAPI</span><span class="tag">PostgreSQL</span>
+              <span class="tag">React</span><span class="tag">GraphQL</span><span class="tag">Auth0</span>
             </div>
           </div>
           <span class="project-arrow">↗</span>
@@ -435,10 +356,8 @@
             <h3>RAG Document Q&amp;A</h3>
             <p>Ask questions over your own documents using retrieval-augmented generation, semantic search, and the Anthropic API.</p>
             <div class="project-tags">
-              <span class="tag">Python</span>
-              <span class="tag">ChromaDB</span>
-              <span class="tag">sentence-transformers</span>
-              <span class="tag">Anthropic API</span>
+              <span class="tag">Python</span><span class="tag">ChromaDB</span>
+              <span class="tag">sentence-transformers</span><span class="tag">Anthropic API</span>
             </div>
           </div>
           <span class="project-arrow">↗</span>
@@ -449,10 +368,8 @@
             <h3>Stock Price Predictor</h3>
             <p>LSTM neural network that forecasts stock price direction using percentage-change targets and a custom directional loss function.</p>
             <div class="project-tags">
-              <span class="tag">PyTorch</span>
-              <span class="tag">LSTM</span>
-              <span class="tag">Streamlit</span>
-              <span class="tag">yfinance</span>
+              <span class="tag">PyTorch</span><span class="tag">LSTM</span>
+              <span class="tag">Streamlit</span><span class="tag">yfinance</span>
             </div>
           </div>
           <span class="project-arrow">↗</span>
@@ -461,11 +378,9 @@
         <a class="project-item" href="https://github.com/YOUR_USERNAME/promoter-analyzer" target="_blank" rel="noopener">
           <div>
             <h3>Promoter Analyzer</h3>
-            <p>Fetches upstream promoter sequences from NCBI Entrez for any gene, with TP53 as the test case. A tool for computational biology workflows.</p>
+            <p>Fetches upstream promoter sequences from NCBI Entrez for any gene. Built around TP53 as the test case — a tool for computational biology workflows.</p>
             <div class="project-tags">
-              <span class="tag">Python</span>
-              <span class="tag">Biopython</span>
-              <span class="tag">NCBI Entrez</span>
+              <span class="tag">Python</span><span class="tag">Biopython</span><span class="tag">NCBI Entrez</span>
             </div>
           </div>
           <span class="project-arrow">↗</span>
@@ -476,9 +391,7 @@
             <h3>URL Shortener</h3>
             <p>Lightweight link-shortening service with a REST API, persistent storage, and a plain HTML/CSS/JS frontend.</p>
             <div class="project-tags">
-              <span class="tag">FastAPI</span>
-              <span class="tag">SQLAlchemy</span>
-              <span class="tag">SQLite</span>
+              <span class="tag">FastAPI</span><span class="tag">SQLAlchemy</span><span class="tag">SQLite</span>
             </div>
           </div>
           <span class="project-arrow">↗</span>
@@ -487,111 +400,55 @@
       </div>
     </section>
 
-    <!-- ── Skills ─────────────────────────────────────────────────── -->
     <section id="skills">
       <p class="section-label">Tech Stack</p>
-
       <div class="skills-grid">
-
         <div class="skill-group">
           <h4>Languages</h4>
-          <ul>
-            <li>Python</li>
-            <li>JavaScript / TypeScript</li>
-            <li>SQL</li>
-            <li>HTML &amp; CSS</li>
-          </ul>
+          <ul><li>Python</li><li>JavaScript / TypeScript</li><li>SQL</li><li>HTML &amp; CSS</li></ul>
         </div>
-
         <div class="skill-group">
           <h4>Backend</h4>
-          <ul>
-            <li>FastAPI</li>
-            <li>SQLAlchemy</li>
-            <li>PostgreSQL</li>
-            <li>SQLite</li>
-          </ul>
+          <ul><li>FastAPI</li><li>SQLAlchemy</li><li>PostgreSQL</li><li>SQLite</li></ul>
         </div>
-
         <div class="skill-group">
           <h4>Frontend</h4>
-          <ul>
-            <li>React</li>
-            <li>Vite</li>
-            <li>Vanilla JS</li>
-          </ul>
+          <ul><li>React</li><li>Vite</li><li>Vanilla JS</li></ul>
         </div>
-
         <div class="skill-group">
           <h4>AI / ML</h4>
-          <ul>
-            <li>PyTorch</li>
-            <li>ChromaDB</li>
-            <li>sentence-transformers</li>
-            <li>Anthropic API</li>
-          </ul>
+          <ul><li>PyTorch</li><li>ChromaDB</li><li>sentence-transformers</li><li>Anthropic API</li></ul>
         </div>
-
         <div class="skill-group">
           <h4>Bio / Tools</h4>
-          <ul>
-            <li>Biopython</li>
-            <li>NCBI Entrez</li>
-            <li>Git &amp; GitHub</li>
-            <li>Streamlit</li>
-          </ul>
+          <ul><li>Biopython</li><li>NCBI Entrez</li><li>Git &amp; GitHub</li><li>Streamlit</li></ul>
         </div>
-
       </div>
     </section>
 
-    <!-- ── Research ───────────────────────────────────────────────── -->
     <section id="research">
       <p class="section-label">Research</p>
-
       <p class="research-intro">
-        I'm working toward a PhD at the intersection of computational biology and
-        computer science — specifically in how chromatin architecture and histone
-        variants regulate gene expression. I'm drawn to questions where
-        single-molecule imaging and quantitative modeling meet molecular biology.
+        I'm working toward a PhD at the intersection of computational biology and computer science — specifically in how chromatin architecture and histone variants regulate gene expression. I'm drawn to questions where single-molecule imaging and quantitative modeling meet molecular biology.
       </p>
 
       <div class="research-interests">
-
         <div class="research-interest-item">
           <h3>Histone Variant Biology &amp; Gene Regulation</h3>
-          <p>
-            Focused on H2A.Z and its role in nucleosome dynamics at gene
-            promoters. Interested in how variant incorporation shapes
-            accessibility and transcriptional output at a mechanistic level.
-          </p>
+          <p>Focused on H2A.Z and its role in nucleosome dynamics at gene promoters. Interested in how variant incorporation shapes accessibility and transcriptional output at a mechanistic level.</p>
         </div>
-
         <div class="research-interest-item">
           <h3>Single-Molecule Imaging</h3>
-          <p>
-            Drawn to live-cell fluorescence and super-resolution approaches
-            that let you watch individual transcription factors and chromatin
-            regulators in action — rather than inferring behavior from
-            population averages.
-          </p>
+          <p>Drawn to live-cell fluorescence and super-resolution approaches that let you watch individual transcription factors and chromatin regulators in action — rather than inferring behavior from population averages.</p>
         </div>
-
         <div class="research-interest-item">
           <h3>Computational Genomics</h3>
-          <p>
-            Applying sequence analysis, motif discovery, and ML models to
-            understand cis-regulatory elements. Actively building tools
-            (like Promoter Analyzer) to practice these methods hands-on.
-          </p>
+          <p>Applying sequence analysis, motif discovery, and ML models to understand cis-regulatory elements. Actively building tools like Promoter Analyzer to practice these methods hands-on.</p>
         </div>
-
       </div>
 
       <p class="research-sublabel">Writing</p>
-
       <div class="writing-list">
-        <!-- Add real links/titles when you have them -->
         <a class="writing-item" href="#" target="_blank" rel="noopener">
           <div>
             <h4>Your writing title here</h4>
@@ -600,55 +457,30 @@
           <span class="writing-arrow">↗</span>
         </a>
       </div>
-
     </section>
 
-    <!-- ── Elsewhere ──────────────────────────────────────────────── -->
     <section id="elsewhere">
       <p class="section-label">Elsewhere</p>
-
-      <p class="elsewhere-intro">
-        Outside of code and research, I'm competitive, curious, and almost
-        always in the middle of learning something new.
-      </p>
-
+      <p class="elsewhere-intro">Outside of code and research, I'm competitive, curious, and almost always in the middle of learning something new.</p>
       <div class="elsewhere-grid">
-
         <div class="elsewhere-block">
           <h4>Quizbowl</h4>
-          <p>
-            I compete in academic quiz bowl — a format that rewards deep,
-            specific knowledge across history, science, literature, and the arts.
-            It's reshaped how I read and retain information.
-          </p>
+          <p>I compete in academic quiz bowl — a format that rewards deep, specific knowledge across history, science, literature, and the arts. It's reshaped how I read and retain information.</p>
         </div>
-
         <div class="elsewhere-block">
           <h4>Strategy Games</h4>
-          <p>
-            I play multiplayer strategy games with friends — the kind where
-            you're managing systems, reading opponents, and making decisions
-            under pressure. Good training for everything else.
-          </p>
+          <p>I play multiplayer strategy games with friends — the kind where you're managing systems, reading opponents, and making decisions under pressure. Good training for everything else.</p>
         </div>
-
         <div class="elsewhere-block">
           <h4>Learning in Public</h4>
-          <p>
-            Most of what I know is self-taught. I believe the best way to
-            understand something is to build it — so I do, and I put it on
-            GitHub.
-          </p>
+          <p>Most of what I know is self-taught. I believe the best way to understand something is to build it — so I do, and I put it on GitHub.</p>
         </div>
-
       </div>
     </section>
 
-    <!-- ── Contact ────────────────────────────────────────────────── -->
     <section id="contact">
       <p class="section-label">Get In Touch</p>
       <p>I'm always open to interesting projects, internship opportunities, or just a good conversation about AI, biology, and software.</p>
-
       <div class="contact-links">
         <a class="contact-link" href="mailto:your@email.com">Email ↗</a>
         <a class="contact-link" href="https://github.com/YOUR_USERNAME" target="_blank" rel="noopener">GitHub ↗</a>
@@ -656,12 +488,184 @@
       </div>
     </section>
 
-    <!-- ── Footer ─────────────────────────────────────────────────── -->
     <footer>
       <p>© 2026 Derrick Liu. Built with HTML &amp; CSS — no frameworks needed.</p>
     </footer>
 
-  </div><!-- /page -->
+  </div>
+
+  <script>
+  (function() {
+    const canvas = document.getElementById('bio-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const GREEN  = '#4ade80';
+    const TEAL   = '#2dd4bf';
+    const DIM    = 'rgba(74,222,128,0.5)';
+    const DIMMER = 'rgba(45,212,191,0.4)';
+
+    /* ── DNA helix strands ── */
+    const helices = [
+      { x: 80,  speed: 0.0004, amp: 22, wave: 60, phase: 0    },
+      { x: 580, speed: 0.0003, amp: 18, wave: 70, phase: 1.2  },
+      { x: 320, speed: 0.00035,amp: 20, wave: 65, phase: 2.4  },
+    ];
+
+    /* ── Floating nucleotide letters ── */
+    const bases = 'ATCGATGCTAGCATGCTAGCGATCG'.split('');
+    const floaters = Array.from({ length: 28 }, (_, i) => ({
+      x:     Math.random() * window.innerWidth,
+      y:     Math.random() * window.innerHeight,
+      vy:    -0.18 - Math.random() * 0.18,
+      vx:    (Math.random() - 0.5) * 0.08,
+      alpha: 0.3 + Math.random() * 0.4,
+      char:  bases[i % bases.length],
+      size:  10 + Math.random() * 8,
+    }));
+
+    /* ── RNA polymerase blobs ── */
+    const polys = Array.from({ length: 3 }, () => ({
+      x:  Math.random() * window.innerWidth,
+      y:  Math.random() * window.innerHeight,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      r:  7 + Math.random() * 5,
+    }));
+
+    /* ── Phosphate backbone nodes ── */
+    function drawHelix(hx, t, amp, wave, phase) {
+      const h = canvas.height;
+      const steps = Math.ceil(h / 8);
+      const pts1 = [], pts2 = [];
+
+      for (let i = 0; i <= steps; i++) {
+        const y   = (i / steps) * h;
+        const ang = (y / wave) * Math.PI * 2 + t + phase;
+        pts1.push({ x: hx + Math.sin(ang) * amp,  y });
+        pts2.push({ x: hx + Math.sin(ang + Math.PI) * amp, y });
+      }
+
+      /* strand 1 */
+      ctx.beginPath();
+      ctx.strokeStyle = GREEN;
+      ctx.lineWidth = 1;
+      ctx.globalAlpha = 0.55;
+      pts1.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+      ctx.stroke();
+
+      /* strand 2 */
+      ctx.beginPath();
+      ctx.strokeStyle = TEAL;
+      ctx.lineWidth = 1;
+      pts2.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+      ctx.stroke();
+
+      /* base-pair rungs */
+      ctx.globalAlpha = 0.25;
+      for (let i = 0; i < steps; i += 5) {
+        const p1 = pts1[i], p2 = pts2[i];
+        ctx.beginPath();
+        ctx.strokeStyle = '#a3e635';
+        ctx.lineWidth = 0.8;
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+
+        /* node dots */
+        ctx.globalAlpha = 0.45;
+        ctx.fillStyle = GREEN;
+        ctx.beginPath();
+        ctx.arc(p1.x, p1.y, 1.8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = TEAL;
+        ctx.beginPath();
+        ctx.arc(p2.x, p2.y, 1.8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 0.25;
+      }
+    }
+
+    function drawFloaters() {
+      ctx.font = 'bold 13px monospace';
+      ctx.textBaseline = 'middle';
+      floaters.forEach(f => {
+        ctx.globalAlpha = f.alpha * 0.55;
+        ctx.fillStyle = GREEN;
+        ctx.fillText(f.char, f.x, f.y);
+      });
+    }
+
+    function drawPolys() {
+      polys.forEach(p => {
+        ctx.globalAlpha = 0.35;
+        ctx.strokeStyle = TEAL;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.stroke();
+        /* trailing blob */
+        ctx.globalAlpha = 0.12;
+        ctx.fillStyle = TEAL;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * 1.6, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    function drawConnectors(t) {
+      /* faint horizontal scan lines suggesting microscope imaging */
+      ctx.globalAlpha = 0.04;
+      ctx.strokeStyle = GREEN;
+      ctx.lineWidth = 0.5;
+      for (let y = 0; y < canvas.height; y += 40) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
+    }
+
+    let last = 0;
+    function frame(ts) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const t = ts * 0.001;
+
+      drawConnectors(t);
+
+      helices.forEach(h => drawHelix(h.x, t * h.speed * 1000, h.amp, h.wave, h.phase));
+
+      /* update + draw floaters */
+      floaters.forEach(f => {
+        f.y += f.vy;
+        f.x += f.vx;
+        if (f.y < -20) { f.y = canvas.height + 10; f.x = Math.random() * canvas.width; }
+        if (f.x < -20) f.x = canvas.width + 10;
+        if (f.x > canvas.width + 20) f.x = -10;
+      });
+      drawFloaters();
+
+      /* update + draw polymerases */
+      polys.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > canvas.width)  p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+      });
+      drawPolys();
+
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(frame);
+    }
+
+    requestAnimationFrame(frame);
+  })();
+  </script>
 
 </body>
 </html>

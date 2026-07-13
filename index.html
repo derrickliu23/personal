@@ -7,24 +7,46 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <style>
+    /* ======================================================================
+       DESIGN TOKENS
+       Everything below is driven by these variables. If you want to retheme
+       the whole site (e.g. swap green→blue), you mostly only need to touch
+       this block.
+    ====================================================================== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
+      /* base surfaces */
       --bg:           #0a0a0a;
       --surface:      #111111;
       --white:        #f0ede8;
       --gray-soft:    #888880;
       --gray-rule:    #222220;
-      --accent:       #4ade80;
+
+      /* accent colors — the two "bio" colors used throughout (DNA strands,
+         glass tints, glow orbs). Swap these two hexes to retheme. */
+      --accent:       #4ade80;   /* green  */
+      --accent-2:     #2dd4bf;   /* teal   */
       --accent-dim:   rgba(74, 222, 128, 0.15);
       --accent-rule:  rgba(74, 222, 128, 0.4);
 
+      /* glassmorphism surface tokens — kept low-alpha + neutral so text
+         contrast stays safe (WCAG-friendly) against the dark canvas */
+      --glass-bg:          rgba(255, 255, 255, 0.035);
+      --glass-bg-hover:    rgba(255, 255, 255, 0.065);
+      --glass-border:      rgba(74, 222, 128, 0.16);
+      --glass-border-hover:rgba(74, 222, 128, 0.45);
+      --glass-blur:        14px;
+      --glass-shadow:      0 8px 30px rgba(0, 0, 0, 0.45);
+      --glass-shadow-hover:0 14px 40px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--glass-border-hover);
+      --glass-radius:      18px;
+
       --font-display: 'DM Serif Display', serif;
       --font-body:    'Inter', sans-serif;
-      --max-w: 680px;
+      --max-w: 720px;
       --pad: clamp(1.5rem, 5vw, 3rem);
     }
 
@@ -36,20 +58,70 @@
       line-height: 1.75;
       color: var(--white);
       background: var(--bg);
-      border-left: 3px solid var(--accent);
       min-height: 100vh;
       position: relative;
       overflow-x: hidden;
     }
 
-    /* ── Bio canvas background ── */
+    /* ── Bio canvas background (DNA helix / floating bases / polymerases) ── */
     #bio-canvas {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
       pointer-events: none;
       z-index: 0;
-      opacity: 0.18;
+      opacity: 0.16;
+    }
+
+    /* ======================================================================
+       GLOW ORBS — the "signature element" for this pass. These are large,
+       soft, blurred blobs drifting slowly behind the glass cards. Because
+       glassmorphism only reads as glassmorphism when there's something
+       colorful *behind* the glass to blur/refract, these orbs are what
+       make the frosted panels actually look frosted instead of just gray.
+
+       ✏️ EDIT: add/remove/reposition orbs freely — just duplicate a
+       .glow-orb div in the body and give it a unique inline `top/left`.
+    ====================================================================== */
+    .glow-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(70px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+      will-change: transform;
+    }
+    .glow-orb--a {
+      width: 420px; height: 420px;
+      top: -10%; left: -10%;
+      background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+      animation: drift-a 26s ease-in-out infinite;
+    }
+    .glow-orb--b {
+      width: 380px; height: 380px;
+      top: 40%; right: -12%;
+      background: radial-gradient(circle, var(--accent-2) 0%, transparent 70%);
+      animation: drift-b 32s ease-in-out infinite;
+    }
+    .glow-orb--c {
+      width: 320px; height: 320px;
+      bottom: -8%; left: 20%;
+      background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+      animation: drift-c 22s ease-in-out infinite;
+    }
+
+    @keyframes drift-a {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50%      { transform: translate(60px, 80px) scale(1.15); }
+    }
+    @keyframes drift-b {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50%      { transform: translate(-70px, -40px) scale(1.1); }
+    }
+    @keyframes drift-c {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50%      { transform: translate(50px, -60px) scale(1.2); }
     }
 
     .page {
@@ -60,15 +132,23 @@
       z-index: 1;
     }
 
-    /* ── Nav ── */
+    /* ── Nav — sticky frosted glass bar ── */
     nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 2rem 0 1.5rem;
-      border-bottom: 1px solid var(--gray-rule);
+      padding: 1.1rem var(--pad);
+      margin: 0 calc(-1 * var(--pad));
       flex-wrap: wrap;
       gap: 1rem;
+
+      background: rgba(10, 10, 10, 0.55);
+      backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+      border-bottom: 1px solid var(--glass-border);
     }
 
     nav .logo {
@@ -82,25 +162,35 @@
     nav ul { list-style: none; display: flex; gap: 1.5rem; flex-wrap: wrap; }
 
     nav ul a {
+      position: relative;
       font-size: 0.8rem;
       font-weight: 500;
       text-decoration: none;
       color: var(--gray-soft);
       letter-spacing: 0.07em;
       text-transform: uppercase;
-      transition: color 0.15s;
+      transition: color 0.2s;
     }
-
+    /* small animated underline on hover */
+    nav ul a::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: -4px;
+      width: 0; height: 1px;
+      background: var(--accent);
+      transition: width 0.25s ease;
+    }
     nav ul a:hover { color: var(--accent); }
+    nav ul a:hover::after { width: 100%; }
 
     /* ── Sections ── */
     section {
-      padding: 4rem 0;
+      padding: 4.5rem 0;
       border-bottom: 1px solid var(--gray-rule);
     }
 
     #about {
-      padding: 5rem 0 4rem;
+      padding: 6rem 0 4.5rem;
       border-bottom: 1px solid var(--gray-rule);
     }
 
@@ -120,6 +210,18 @@
       letter-spacing: -0.01em;
       margin-bottom: 1.5rem;
       color: var(--white);
+      /* subtle animated gradient sweep across the headline text */
+      background: linear-gradient(100deg, var(--white) 40%, var(--accent) 50%, var(--white) 60%);
+      background-size: 250% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: headline-sheen 7s ease-in-out infinite;
+    }
+    @keyframes headline-sheen {
+      0%   { background-position: 0% 0; }
+      50%  { background-position: 100% 0; }
+      100% { background-position: 0% 0; }
     }
 
     #about p {
@@ -138,48 +240,78 @@
       margin-bottom: 2.5rem;
     }
 
+    /* ======================================================================
+       GLASS CARD — the shared frosted-panel treatment used for project
+       items, skill groups, research items, and "elsewhere" blocks.
+       Apply the `.glass` class to any block-level element to give it
+       the frosted, lifting, glowing hover treatment.
+    ====================================================================== */
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--glass-radius);
+      box-shadow: var(--glass-shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease,
+                  background 0.3s ease, border-color 0.3s ease;
+    }
+    .glass:hover {
+      transform: translateY(-4px);
+      background: var(--glass-bg-hover);
+      border-color: var(--glass-border-hover);
+      box-shadow: var(--glass-shadow-hover);
+    }
+
     /* ── Projects ── */
-    .projects-grid { display: flex; flex-direction: column; }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.1rem;
+    }
 
     .project-item {
       display: grid;
       grid-template-columns: 1fr auto;
       align-items: start;
       gap: 1rem;
-      padding: 1.75rem 0;
-      border-top: 1px solid var(--gray-rule);
+      padding: 1.75rem;
       text-decoration: none;
       color: inherit;
-      transition: opacity 0.15s;
     }
 
-    .project-item:last-child { border-bottom: 1px solid var(--gray-rule); }
-    .project-item:hover { opacity: 0.6; }
+    .project-item h3 { font-size: 1.02rem; font-weight: 600; margin-bottom: 0.3rem; color: var(--white); }
+    .project-item p  { font-size: 0.9rem; color: var(--gray-soft); line-height: 1.55; max-width: 460px; }
 
-    .project-item h3 { font-size: 1rem; font-weight: 500; margin-bottom: 0.3rem; color: var(--white); }
-    .project-item p  { font-size: 0.9rem; color: var(--gray-soft); line-height: 1.5; max-width: 460px; }
-
-    .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.7rem; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.9rem; }
 
     .tag {
       font-size: 0.7rem;
       font-weight: 500;
       letter-spacing: 0.04em;
-      padding: 0.2rem 0.55rem;
+      padding: 0.25rem 0.65rem;
+      background: rgba(74, 222, 128, 0.06);
       border: 1px solid var(--gray-rule);
       border-radius: 99px;
       color: var(--gray-soft);
     }
 
-    .project-arrow { font-size: 1.1rem; color: var(--gray-soft); margin-top: 0.2rem; transition: transform 0.15s; }
-    .project-item:hover .project-arrow { transform: translate(3px, -3px); color: var(--accent); }
+    .project-arrow {
+      font-size: 1.1rem;
+      color: var(--gray-soft);
+      margin-top: 0.2rem;
+      transition: transform 0.25s ease, color 0.25s ease;
+    }
+    .project-item:hover .project-arrow { transform: translate(4px, -4px); color: var(--accent); }
 
     /* ── Skills ── */
     .skills-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 2rem 3rem;
+      gap: 1.1rem;
     }
+
+    .skill-group { padding: 1.4rem 1.5rem; }
 
     .skill-group h4 {
       font-size: 0.72rem;
@@ -208,16 +340,16 @@
       line-height: 1.75;
     }
 
-    .research-interests { display: flex; flex-direction: column; margin-bottom: 3rem; }
-
-    .research-interest-item {
-      padding: 1.5rem 0;
-      border-top: 1px solid var(--gray-rule);
+    .research-interests {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-bottom: 3rem;
     }
 
-    .research-interest-item:last-child { border-bottom: 1px solid var(--gray-rule); }
+    .research-interest-item { padding: 1.5rem 1.75rem; }
 
-    .research-interest-item h3 { font-size: 1rem; font-weight: 500; margin-bottom: 0.35rem; color: var(--white); }
+    .research-interest-item h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.35rem; color: var(--white); }
     .research-interest-item p  { font-size: 0.9rem; color: var(--gray-soft); line-height: 1.6; max-width: 500px; }
 
     .research-sublabel {
@@ -230,26 +362,21 @@
       margin-top: 2.5rem;
     }
 
-    .writing-list { display: flex; flex-direction: column; }
+    .writing-list { display: flex; flex-direction: column; gap: 0.9rem; }
 
     .writing-item {
       display: grid;
       grid-template-columns: 1fr auto;
       align-items: center;
       gap: 1rem;
-      padding: 1.25rem 0;
-      border-top: 1px solid var(--gray-rule);
+      padding: 1.1rem 1.5rem;
       text-decoration: none;
       color: inherit;
-      transition: opacity 0.15s;
     }
-
-    .writing-item:last-child { border-bottom: 1px solid var(--gray-rule); }
-    .writing-item:hover { opacity: 0.6; }
-    .writing-item h4    { font-size: 0.95rem; font-weight: 500; color: var(--white); }
+    .writing-item h4    { font-size: 0.95rem; font-weight: 600; color: var(--white); }
     .writing-meta       { font-size: 0.78rem; color: var(--gray-soft); margin-top: 0.15rem; }
-    .writing-arrow      { font-size: 1rem; color: var(--gray-soft); transition: transform 0.15s; }
-    .writing-item:hover .writing-arrow { transform: translate(3px, -3px); color: var(--accent); }
+    .writing-arrow      { font-size: 1rem; color: var(--gray-soft); transition: transform 0.25s ease, color 0.25s ease; }
+    .writing-item:hover .writing-arrow { transform: translate(4px, -4px); color: var(--accent); }
 
     /* ── Elsewhere ── */
     .elsewhere-intro {
@@ -263,8 +390,10 @@
     .elsewhere-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 2.5rem 3rem;
+      gap: 1.1rem;
     }
+
+    .elsewhere-block { padding: 1.5rem; }
 
     .elsewhere-block h4 {
       font-family: var(--font-display);
@@ -276,24 +405,35 @@
     .elsewhere-block p { font-size: 0.9rem; color: var(--gray-soft); line-height: 1.6; }
 
     /* ── Contact ── */
+    #contact-panel { padding: 2.25rem clamp(1.5rem, 5vw, 2.5rem); }
+
     #contact p { font-size: 1.05rem; color: var(--gray-soft); margin-bottom: 2rem; max-width: 480px; }
 
-    .contact-links { display: flex; flex-wrap: wrap; gap: 1rem; }
+    .contact-links { display: flex; flex-wrap: wrap; gap: 0.9rem; }
 
     .contact-link {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.45rem;
       font-size: 0.9rem;
       font-weight: 500;
       color: var(--white);
       text-decoration: none;
-      border-bottom: 1px solid var(--accent-rule);
-      padding-bottom: 2px;
-      transition: color 0.15s, border-color 0.15s;
+      padding: 0.6rem 1.1rem;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 99px;
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      transition: color 0.2s, border-color 0.2s, background 0.2s, transform 0.2s;
     }
 
-    .contact-link:hover { color: var(--accent); border-color: var(--accent); }
+    .contact-link:hover {
+      color: var(--accent);
+      border-color: var(--glass-border-hover);
+      background: var(--glass-bg-hover);
+      transform: translateY(-2px);
+    }
 
     footer {
       padding: 2.5rem 0;
@@ -301,18 +441,65 @@
       color: var(--gray-soft);
     }
 
+    /* ======================================================================
+       SCROLL-REVEAL MOTION
+       Any element with class="reveal" starts slightly lower + transparent,
+       and animates up into place the first time it enters the viewport
+       (handled by the IntersectionObserver script at the bottom of body).
+       Respects prefers-reduced-motion (see media query further below).
+    ====================================================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* stagger children of a grid/list automatically via inline --delay,
+       set by the JS below so cards cascade in rather than popping together */
+
+    /* ── Hero load-in animation (runs once on page load, no JS needed) ── */
+    .load-in {
+      opacity: 0;
+      animation: load-in 0.9s ease forwards;
+    }
+    .load-in--1 { animation-delay: 0.05s; }
+    .load-in--2 { animation-delay: 0.2s; }
+    .load-in--3 { animation-delay: 0.35s; }
+    .load-in--4 { animation-delay: 0.5s; }
+    @keyframes load-in {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
     @media (max-width: 520px) {
-      body { border-left: none; border-top: 3px solid var(--accent); }
       nav ul { gap: 1.1rem; }
       .project-item, .writing-item { grid-template-columns: 1fr; }
       .project-arrow, .writing-arrow { display: none; }
+    }
+
+    /* Respect users who've asked for reduced motion at the OS level */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .glow-orb, #about h1 { animation: none; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .load-in { opacity: 1; animation: none; }
+      .glass:hover, .project-item:hover .project-arrow,
+      .writing-item:hover .writing-arrow, .contact-link:hover { transform: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ── Biological background canvas ── -->
+  <!-- ── Biological background canvas (DNA helix / bases / polymerases) ── -->
   <canvas id="bio-canvas"></canvas>
+
+  <!-- ── Ambient glow orbs behind the glass panels — see .glow-orb CSS above ── -->
+  <div class="glow-orb glow-orb--a"></div>
+  <div class="glow-orb glow-orb--b"></div>
+  <div class="glow-orb glow-orb--c"></div>
 
   <div class="page">
 
@@ -329,17 +516,21 @@
     </nav>
 
     <section id="about">
-      <p class="eyebrow">Full-Stack &amp; AI/ML Developer</p>
-      <h1>Building things<br>that learn.</h1>
-      <p>I'm a self-taught computer programmer and researcher exploring interests in full-stack web development, machine learning, and biology. I build portfolio projects to sharpen my craft and to solve problems.</p>
-      <p>Currently studying at Johns Hopkins University. Always shipping something.</p>
+      <p class="eyebrow load-in load-in--1">Full-Stack &amp; AI/ML Developer</p>
+      <h1 class="load-in load-in--2">Building things<br>that learn.</h1>
+      <!-- ✏️ EDIT: your bio copy -->
+      <p class="load-in load-in--3">I'm a self-taught computer programmer and researcher exploring interests in full-stack web development, machine learning, and biology. I build portfolio projects to sharpen my craft and to solve problems.</p>
+      <p class="load-in load-in--4">Currently studying at Johns Hopkins University. Always shipping something.</p>
     </section>
 
     <section id="projects">
-      <p class="section-label">Coding — Selected Projects</p>
+      <p class="section-label reveal">Coding — Selected Projects</p>
       <div class="projects-grid">
 
-        <a class="project-item" href="https://github.com/YOUR_USERNAME/dievs" target="_blank" rel="noopener">
+        <!-- ✏️ EDIT: replace YOUR_USERNAME with your GitHub handle in every link below,
+             or point each href directly at the individual repo -->
+
+        <a class="project-item glass reveal" href="https://github.com/YOUR_USERNAME/dievs" target="_blank" rel="noopener">
           <div>
             <h3>Dievs</h3>
             <p>A full-stack webtoon rating and review platform with tier-based scoring (F–S), powered by the AniList GraphQL API.</p>
@@ -351,7 +542,7 @@
           <span class="project-arrow">↗</span>
         </a>
 
-        <a class="project-item" href="https://github.com/YOUR_USERNAME/rag-qa" target="_blank" rel="noopener">
+        <a class="project-item glass reveal" href="https://github.com/YOUR_USERNAME/rag-qa" target="_blank" rel="noopener">
           <div>
             <h3>RAG Document Q&amp;A</h3>
             <p>Ask questions over your own documents using retrieval-augmented generation, semantic search, and the Anthropic API.</p>
@@ -363,7 +554,7 @@
           <span class="project-arrow">↗</span>
         </a>
 
-        <a class="project-item" href="https://github.com/YOUR_USERNAME/stock-predictor" target="_blank" rel="noopener">
+        <a class="project-item glass reveal" href="https://github.com/YOUR_USERNAME/stock-predictor" target="_blank" rel="noopener">
           <div>
             <h3>Stock Price Predictor</h3>
             <p>LSTM neural network that forecasts stock price direction using percentage-change targets and a custom directional loss function.</p>
@@ -375,7 +566,7 @@
           <span class="project-arrow">↗</span>
         </a>
 
-        <a class="project-item" href="https://github.com/YOUR_USERNAME/promoter-analyzer" target="_blank" rel="noopener">
+        <a class="project-item glass reveal" href="https://github.com/YOUR_USERNAME/promoter-analyzer" target="_blank" rel="noopener">
           <div>
             <h3>Promoter Analyzer</h3>
             <p>Fetches upstream promoter sequences from NCBI Entrez for any gene. Built around TP53 as the test case — a tool for computational biology workflows.</p>
@@ -386,7 +577,7 @@
           <span class="project-arrow">↗</span>
         </a>
 
-        <a class="project-item" href="https://github.com/YOUR_USERNAME/url-shortener" target="_blank" rel="noopener">
+        <a class="project-item glass reveal" href="https://github.com/YOUR_USERNAME/url-shortener" target="_blank" rel="noopener">
           <div>
             <h3>URL Shortener</h3>
             <p>Lightweight link-shortening service with a REST API, persistent storage, and a plain HTML/CSS/JS frontend.</p>
@@ -397,59 +588,65 @@
           <span class="project-arrow">↗</span>
         </a>
 
+        <!-- ✏️ EDIT: to add another project, copy one of the <a class="project-item glass reveal">
+             blocks above, change the href/title/description/tags, and paste it here. -->
+
       </div>
     </section>
 
     <section id="skills">
-      <p class="section-label">Tech Stack</p>
+      <p class="section-label reveal">Tech Stack</p>
       <div class="skills-grid">
-        <div class="skill-group">
+        <div class="skill-group glass reveal">
           <h4>Languages</h4>
           <ul><li>Python</li><li>JavaScript / TypeScript</li><li>SQL</li><li>HTML &amp; CSS</li></ul>
         </div>
-        <div class="skill-group">
+        <div class="skill-group glass reveal">
           <h4>Backend</h4>
           <ul><li>FastAPI</li><li>SQLAlchemy</li><li>PostgreSQL</li><li>SQLite</li></ul>
         </div>
-        <div class="skill-group">
+        <div class="skill-group glass reveal">
           <h4>Frontend</h4>
           <ul><li>React</li><li>Vite</li><li>Vanilla JS</li></ul>
         </div>
-        <div class="skill-group">
+        <div class="skill-group glass reveal">
           <h4>AI / ML</h4>
           <ul><li>PyTorch</li><li>ChromaDB</li><li>sentence-transformers</li><li>Anthropic API</li></ul>
         </div>
-        <div class="skill-group">
+        <div class="skill-group glass reveal">
           <h4>Bio / Tools</h4>
           <ul><li>Biopython</li><li>NCBI Entrez</li><li>Git &amp; GitHub</li><li>Streamlit</li></ul>
         </div>
+        <!-- ✏️ EDIT: add another skill-group block here, matching the pattern above -->
       </div>
     </section>
 
     <section id="research">
-      <p class="section-label">Research</p>
-      <p class="research-intro">
+      <p class="section-label reveal">Research</p>
+      <p class="research-intro reveal">
         I'm working toward a PhD at the intersection of computational biology and computer science — specifically in how chromatin architecture and histone variants regulate gene expression. I'm drawn to questions where single-molecule imaging and quantitative modeling meet molecular biology.
       </p>
 
       <div class="research-interests">
-        <div class="research-interest-item">
+        <div class="research-interest-item glass reveal">
           <h3>Histone Variant Biology &amp; Gene Regulation</h3>
           <p>Focused on H2A.Z and its role in nucleosome dynamics at gene promoters. Interested in how variant incorporation shapes accessibility and transcriptional output at a mechanistic level.</p>
         </div>
-        <div class="research-interest-item">
+        <div class="research-interest-item glass reveal">
           <h3>Single-Molecule Imaging</h3>
           <p>Drawn to live-cell fluorescence and super-resolution approaches that let you watch individual transcription factors and chromatin regulators in action — rather than inferring behavior from population averages.</p>
         </div>
-        <div class="research-interest-item">
+        <div class="research-interest-item glass reveal">
           <h3>Computational Genomics</h3>
           <p>Applying sequence analysis, motif discovery, and ML models to understand cis-regulatory elements. Actively building tools like Promoter Analyzer to practice these methods hands-on.</p>
         </div>
       </div>
 
-      <p class="research-sublabel">Writing</p>
+      <p class="research-sublabel reveal">Writing</p>
       <div class="writing-list">
-        <a class="writing-item" href="#" target="_blank" rel="noopener">
+        <!-- ✏️ EDIT: replace with your actual essay/writeup title, link, type, and year.
+             Duplicate this block for additional pieces. -->
+        <a class="writing-item glass reveal" href="#" target="_blank" rel="noopener">
           <div>
             <h4>Your writing title here</h4>
             <p class="writing-meta">Essay · 2025</p>
@@ -460,31 +657,38 @@
     </section>
 
     <section id="elsewhere">
-      <p class="section-label">Elsewhere</p>
-      <p class="elsewhere-intro">Outside of code and research, I'm competitive, curious, and almost always in the middle of learning something new.</p>
+      <p class="section-label reveal">Elsewhere</p>
+      <p class="elsewhere-intro reveal">Outside of code and research, I'm competitive, curious, and almost always in the middle of learning something new.</p>
       <div class="elsewhere-grid">
-        <div class="elsewhere-block">
+        <div class="elsewhere-block glass reveal">
           <h4>Quizbowl</h4>
           <p>I compete in academic quiz bowl — a format that rewards deep, specific knowledge across history, science, literature, and the arts. It's reshaped how I read and retain information.</p>
         </div>
-        <div class="elsewhere-block">
+        <div class="elsewhere-block glass reveal">
           <h4>Strategy Games</h4>
           <p>I play multiplayer strategy games with friends — the kind where you're managing systems, reading opponents, and making decisions under pressure. Good training for everything else.</p>
         </div>
-        <div class="elsewhere-block">
+        <div class="elsewhere-block glass reveal">
           <h4>Learning in Public</h4>
           <p>Most of what I know is self-taught. I believe the best way to understand something is to build it — so I do, and I put it on GitHub.</p>
         </div>
+        <!-- ✏️ EDIT: add another elsewhere-block here for another interest -->
       </div>
     </section>
 
     <section id="contact">
-      <p class="section-label">Get In Touch</p>
-      <p>I'm always open to interesting projects, internship opportunities, or just a good conversation about AI, biology, and software.</p>
-      <div class="contact-links">
-        <a class="contact-link" href="mailto:your@email.com">Email ↗</a>
-        <a class="contact-link" href="https://github.com/YOUR_USERNAME" target="_blank" rel="noopener">GitHub ↗</a>
-        <a class="contact-link" href="https://linkedin.com/in/YOUR_HANDLE" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <p class="section-label reveal">Get In Touch</p>
+      <div id="contact-panel" class="glass reveal">
+        <!-- ✏️ EDIT: your outreach copy -->
+        <p>I'm always open to interesting projects, internship opportunities, or just a good conversation about AI, biology, and software.</p>
+        <div class="contact-links">
+          <!-- ✏️ EDIT: swap in your real email, GitHub, and LinkedIn -->
+          <a class="contact-link" href="mailto:your@email.com">Email ↗</a>
+          <a class="contact-link" href="https://github.com/YOUR_USERNAME" target="_blank" rel="noopener">GitHub ↗</a>
+          <a class="contact-link" href="https://linkedin.com/in/YOUR_HANDLE" target="_blank" rel="noopener">LinkedIn ↗</a>
+          <!-- ✏️ EDIT: add more links (Twitter/X, personal blog, resume PDF, etc.) by
+               copying an <a class="contact-link"> line above -->
+        </div>
       </div>
     </section>
 
@@ -495,6 +699,11 @@
   </div>
 
   <script>
+  /* ==========================================================================
+     1) BIO CANVAS — DNA helix strands, floating nucleotide letters, and
+        drifting "polymerase" blobs. Pure canvas 2D, no dependencies, so it
+        runs fine on GitHub Pages with zero build step.
+  ========================================================================== */
   (function() {
     const canvas = document.getElementById('bio-canvas');
     const ctx = canvas.getContext('2d');
@@ -508,10 +717,9 @@
 
     const GREEN  = '#4ade80';
     const TEAL   = '#2dd4bf';
-    const DIM    = 'rgba(74,222,128,0.5)';
-    const DIMMER = 'rgba(45,212,191,0.4)';
 
-    /* ── DNA helix strands ── */
+    /* ── DNA helix strands. ✏️ EDIT: add/remove entries to change how many
+       helices drift across the page, or tweak x / speed / amp / wave. ── */
     const helices = [
       { x: 80,  speed: 0.0004, amp: 22, wave: 60, phase: 0    },
       { x: 580, speed: 0.0003, amp: 18, wave: 70, phase: 1.2  },
@@ -539,7 +747,6 @@
       r:  7 + Math.random() * 5,
     }));
 
-    /* ── Phosphate backbone nodes ── */
     function drawHelix(hx, t, amp, wave, phase) {
       const h = canvas.height;
       const steps = Math.ceil(h / 8);
@@ -552,7 +759,6 @@
         pts2.push({ x: hx + Math.sin(ang + Math.PI) * amp, y });
       }
 
-      /* strand 1 */
       ctx.beginPath();
       ctx.strokeStyle = GREEN;
       ctx.lineWidth = 1;
@@ -560,14 +766,12 @@
       pts1.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
       ctx.stroke();
 
-      /* strand 2 */
       ctx.beginPath();
       ctx.strokeStyle = TEAL;
       ctx.lineWidth = 1;
       pts2.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
       ctx.stroke();
 
-      /* base-pair rungs */
       ctx.globalAlpha = 0.25;
       for (let i = 0; i < steps; i += 5) {
         const p1 = pts1[i], p2 = pts2[i];
@@ -578,7 +782,6 @@
         ctx.lineTo(p2.x, p2.y);
         ctx.stroke();
 
-        /* node dots */
         ctx.globalAlpha = 0.45;
         ctx.fillStyle = GREEN;
         ctx.beginPath();
@@ -610,7 +813,6 @@
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.stroke();
-        /* trailing blob */
         ctx.globalAlpha = 0.12;
         ctx.fillStyle = TEAL;
         ctx.beginPath();
@@ -619,8 +821,7 @@
       });
     }
 
-    function drawConnectors(t) {
-      /* faint horizontal scan lines suggesting microscope imaging */
+    function drawConnectors() {
       ctx.globalAlpha = 0.04;
       ctx.strokeStyle = GREEN;
       ctx.lineWidth = 0.5;
@@ -632,38 +833,79 @@
       }
     }
 
-    let last = 0;
+    // Respect prefers-reduced-motion: render one static frame and stop.
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     function frame(ts) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const t = ts * 0.001;
 
-      drawConnectors(t);
-
+      drawConnectors();
       helices.forEach(h => drawHelix(h.x, t * h.speed * 1000, h.amp, h.wave, h.phase));
 
-      /* update + draw floaters */
-      floaters.forEach(f => {
-        f.y += f.vy;
-        f.x += f.vx;
-        if (f.y < -20) { f.y = canvas.height + 10; f.x = Math.random() * canvas.width; }
-        if (f.x < -20) f.x = canvas.width + 10;
-        if (f.x > canvas.width + 20) f.x = -10;
-      });
+      if (!reduceMotion) {
+        floaters.forEach(f => {
+          f.y += f.vy;
+          f.x += f.vx;
+          if (f.y < -20) { f.y = canvas.height + 10; f.x = Math.random() * canvas.width; }
+          if (f.x < -20) f.x = canvas.width + 10;
+          if (f.x > canvas.width + 20) f.x = -10;
+        });
+      }
       drawFloaters();
 
-      /* update + draw polymerases */
-      polys.forEach(p => {
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < 0 || p.x > canvas.width)  p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-      });
+      if (!reduceMotion) {
+        polys.forEach(p => {
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0 || p.x > canvas.width)  p.vx *= -1;
+          if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+        });
+      }
       drawPolys();
 
       ctx.globalAlpha = 1;
-      requestAnimationFrame(frame);
+      if (!reduceMotion) requestAnimationFrame(frame);
     }
 
     requestAnimationFrame(frame);
+  })();
+
+  /* ==========================================================================
+     2) SCROLL REVEAL — fades/slides `.reveal` elements in as they enter the
+        viewport, with a small stagger for siblings inside the same grid so
+        cards cascade in rather than all popping at once.
+  ========================================================================== */
+  (function() {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const items = document.querySelectorAll('.reveal');
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      items.forEach(el => el.classList.add('is-visible'));
+      return;
+    }
+
+    // stagger cards that share a parent grid/list
+    const groups = new Map();
+    items.forEach(el => {
+      const parent = el.parentElement;
+      if (!groups.has(parent)) groups.set(parent, []);
+      groups.get(parent).push(el);
+    });
+    groups.forEach(siblings => {
+      siblings.forEach((el, i) => {
+        el.style.transitionDelay = `${Math.min(i * 80, 400)}ms`;
+      });
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    items.forEach(el => observer.observe(el));
   })();
   </script>
 
